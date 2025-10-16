@@ -68,7 +68,7 @@ NANO and change /dev/sdx to target disk
 
 > $ nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount /tmp/disko-config.nix
 
-check if everything is ok with `df -h` should see zroot/root mounted on /mnt, and other ...
+check if everything is ok with `df -h` `zfs list` `zpool list` `zfs list -t snapshot`should see zroot/root mounted on /mnt, and other ...
 
 // For BIOS/MBR:
 // create a /dev/sda/sd1 partition as 1GB 
@@ -82,13 +82,11 @@ Before I even mount it, I create a snapshot while it is totally blank:
 
 > $  zfs snapshot zroot/root@blank
 
-> $ sudo nixos-generate-config --no-filesystems --root /mnt
-
-Why --no-filesystems and --root?
-The fileSystems configuration will automatically be added by disko’s nixosModule (see below). Therefore, we use --no-filesystems to avoid generating it here.
---root is to specify the mountpoint to generate configuration.nix and hardware-configuration.nix in. Here, our configuration will be generated in /mnt/etc/nixos.
-
-> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/flake.nix -o /mnt/etc/nixos/flake.nix
+> $ nixos-generate-config --no-filesystems --root /mnt \
+> $ mv /tmp/disko-config.nix /mnt/etc/nixos \
+> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/flake.nix -o /mnt/etc/nixos/flake.nix \
+> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/configuration.nix -o /mnt/etc/nixos/configuration.nix \
+> $ cd /mnt/etc/nixos
 
 1. Move the disko-config.nix to the flake directory:
 
