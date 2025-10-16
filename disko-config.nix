@@ -7,6 +7,12 @@
         content = {
           type = "gpt";
           partitions = {
+            # MBR (Master Boot Record) partition for GRUB.
+            # boot = {
+            #   size = "1M";
+            #   type = "EF02";
+            # };
+            # ESP (EFI System Partition).
             ESP = {
               size = "1G";
               type = "EF00";
@@ -17,6 +23,7 @@
                 mountOptions = [ "umask=0077" ];
               };
             };
+            # ZFS Partition
             zfs = {
               size = "100%";
               content = {
@@ -44,14 +51,21 @@
         datasets = {
           root = {
             type = "zfs_fs";
-            options.mountpoint = "legacy";
             mountpoint = "/";
+            options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "false";
           };
-          home = {
+          nix = {
             type = "zfs_fs";
+            mountpoint = "/nix";
 	          options.mountpoint = "legacy";
-            mountpoint = "/home";
+            options."com.sun:auto-snapshot" = "true";
+          };
+          persistence = {
+            type = "zfs_fs";
+            mountpoint = "/persistence";
+            options.mountpoint = "legacy";
+            options."com.sun:auto-snapshot" = "true";
           };
         };
       };

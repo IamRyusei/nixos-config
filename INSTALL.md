@@ -55,21 +55,20 @@ Login as root with no password
 
 Source - https://nixos.asia/en/nixos-install-disko
 
-Identify the disk where to install the system by using `fdisk -l` and `lsblk`. 
+Identify wether the system is UEFI or BIOS (legacy) by checking if `/sys/firmware/efi` exists means system uses UEFI.
 
-1. Retrieve the disk configuration to a temporary location, calling it disko-config.nix (we will use it latter):
+Identify the disk where to install the system by using `fdisk -l` and `lsblk`.
 
-// TODO SOSTITUIRE CON IL DISKO.NIX DI QUESTO PROGETTO
-> $ curl https://raw.githubusercontent.com/nix-community/disko/refs/heads/master/example/zfs.nix -o /tmp/disko-config.nix
+1. Retrieve the disk configuration to a temporary location, calling it "disko-config.nix" (we will use it later):
+
+// TODO SOSTITUIRE CON IL DISKO.NIX DI QUESTO PROGETTO  
+> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/disko-config.nix -o /tmp/disko-config.nix
 
 NANO and change /dev/sdx to target disk
 
-> $ sudo nix \
-  --experimental-features "nix-command flakes" \
-  run github:nix-community/disko -- \
-  --mode disko /tmp/disko-config.nix
+> $ nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount /tmp/disko-config.nix
 
-ls /sys/firmware/efi exists means system uses UEFI
+
 
 // Assuming the disk is named `/dev/sdX` then open the graphical partition tool
 // > sudo fdisk /dev/sdX
