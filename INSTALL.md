@@ -62,24 +62,25 @@ Identify the disk where to install the system by using `fdisk -l` and `lsblk`.
 1. Retrieve the disk configuration to a temporary location, calling it "disko-config.nix" (we will use it later):
 
 // TODO SOSTITUIRE CON IL DISKO.NIX DI QUESTO PROGETTO  
-> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/disko-config.nix -o /tmp/disko-config.nix
+> $ curl https://raw.githubusercontent.com/iamryusei/nixos-config/refs/heads/master/disko-config.nix -o /tmp/disko-config.nix
 
 NANO and change /dev/sdx to target disk
 
 > $ nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount /tmp/disko-config.nix
 
+check if everything is ok with `df -h` should see zroot/root mounted on /mnt, and other ...
 
-
-// Assuming the disk is named `/dev/sdX` then open the graphical partition tool
-// > sudo fdisk /dev/sdX
-
-For BIOS/MBR:
-create a /dev/sda/sd1 partition as 1GB 
-swap 16 GB
-then the rest main partition
+// For BIOS/MBR:
+// create a /dev/sda/sd1 partition as 1GB 
+// swap 16 GB
+// then the rest main partition
 
 Generate initial NixOS configuration 
 With the disk partitioned, we are ready to follow the usual NixOS installation process. The first step is to generate the initial NixOS configuration under /mnt.
+
+Before I even mount it, I create a snapshot while it is totally blank:
+
+> $  zfs snapshot zroot/root@blank
 
 > $ sudo nixos-generate-config --no-filesystems --root /mnt
 
@@ -89,7 +90,7 @@ The fileSystems configuration will automatically be added by disko’s nixosModu
 
 > $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/flake.nix -o /mnt/etc/nixos/flake.nix
 
-3. Move the disko-config.nix to the flake directory:
+1. Move the disko-config.nix to the flake directory:
 
 mv /tmp/disko-config.nix /mnt/etc/nixos
 

@@ -8,12 +8,14 @@
           type = "gpt";
           partitions = {
             # MBR (Master Boot Record) partition for GRUB.
-            # boot = {
-            #   size = "1M";
-            #   type = "EF02";
-            # };
+            #boot = {
+            #  start = "0M";
+            #  size = "1M";
+            #  type = "EF02";
+            #};
             # ESP (EFI System Partition).
             ESP = {
+              start = "1M";
               size = "1G";
               type = "EF00";
               content = {
@@ -36,18 +38,9 @@
       };
     };
     zpool = {
-      zroot = {
+      zpool1 = {
         type = "zpool";
-        #mode = "mirror";
-        # Workaround: cannot import 'zroot': I/O error in disko tests
-        #options.cachefile = "none";
-        #rootFsOptions = {
-        #  compression = "zstd";
-        #  "com.sun:auto-snapshot" = "false";
-        #};
-        #mountpoint = "/";
-        # postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zroot@blank$' || zfs snapshot zroot@blank";
-
+        postCreateHook = "zfs snapshot zpool1/root@blank";
         datasets = {
           root = {
             type = "zfs_fs";
@@ -58,7 +51,7 @@
           nix = {
             type = "zfs_fs";
             mountpoint = "/nix";
-	          options.mountpoint = "legacy";
+            options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "true";
           };
           persistence = {
