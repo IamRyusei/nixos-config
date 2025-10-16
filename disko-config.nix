@@ -30,7 +30,7 @@
               size = "100%";
               content = {
                 type = "zfs";
-                pool = "zroot";
+                pool = "zpool";
               };
             };
           };
@@ -38,9 +38,10 @@
       };
     };
     zpool = {
-      zpool1 = {
+      zpool = {
         type = "zpool";
-        postCreateHook = "zfs snapshot zpool1/root@blank";
+        postCreateHook = "zfs snapshot zpool/root@blank";
+        preMountHook = "zfs rollback -r zpool/root@blank";
         datasets = {
           root = {
             type = "zfs_fs";
