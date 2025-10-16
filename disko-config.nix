@@ -8,11 +8,11 @@
           type = "gpt";
           partitions = {
             # MBR (Master Boot Record) partition for GRUB.
-            #boot = {
-            #  start = "0M";
-            #  size = "1M";
-            #  type = "EF02";
-            #};
+            boot = {
+              start = "0M";
+              size = "1M";
+              type = "EF02";
+            };
             # ESP (EFI System Partition).
             ESP = {
               start = "1M";
@@ -43,19 +43,19 @@
         postCreateHook = "zfs snapshot zpool/root@blank";
         preMountHook = "zfs rollback -r zpool/root@blank";
         datasets = {
-          "root/" = {
+          root = {
             type = "zfs_fs";
             mountpoint = "/";
             options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "false";
           };
-          "nix/" = {
+          nix = {
             type = "zfs_fs";
             mountpoint = "/nix";
             options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "true";
           };
-          "persistence/" = {
+          persistence = {
             type = "zfs_fs";
             mountpoint = "/persistence";
             options.mountpoint = "legacy";
