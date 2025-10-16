@@ -1,20 +1,12 @@
-# File: /etc/nixos/disko-config.nix
-# Description: 
-#
-# Author: Leonardo Spaccini <leonardo.spaccini.gtr@gmail.com>
 {
   disko.devices = {
     disk = {
       main = {
-        device = "/dev/sda";
         type = "disk";
+        device = "/dev/sdx";
         content = {
           type = "gpt";
           partitions = {
-            boot = {
-              size = "1M";
-              type = "EF02"; # for grub MBR
-            };
             ESP = {
               size = "1G";
               type = "EF00";
@@ -25,14 +17,41 @@
                 mountOptions = [ "umask=0077" ];
               };
             };
-            root = {
+            zfs = {
               size = "100%";
               content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/";
+                type = "zfs";
+                pool = "zroot";
               };
             };
+          };
+        };
+      };
+    };
+    zpool = {
+      zroot = {
+        type = "zpool";
+        #mode = "mirror";
+        # Workaround: cannot import 'zroot': I/O error in disko tests
+        #options.cachefile = "none";
+        #rootFsOptions = {
+        #  compression = "zstd";
+        #  "com.sun:auto-snapshot" = "false";
+        #};
+        #mountpoint = "/";
+        # postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zroot@blank$' || zfs snapshot zroot@blank";
+
+        datasets = {
+          root = {
+            type = "zfs_fs";
+            options.mountpoint = "legacy";
+            mountpoint = "/";
+            options."com.sun:auto-snapshot" = "false";
+          };
+          home = {
+            type = "zfs_fs";
+	          options.mountpoint = "legacy";
+            mountpoint = "/home";
           };
         };
       };
