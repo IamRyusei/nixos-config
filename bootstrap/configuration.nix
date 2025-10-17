@@ -3,6 +3,7 @@
   imports = [ 
     ./hardware-configuration.nix
     ./disko-config.nix
+    ./impermanence.nix
   ];
 
   # System
@@ -12,7 +13,11 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.efiInstallAsRemovable = true;
-FG
+
+  # boot.initrd.postDeviceCommands = lib.mkAfter ''
+  #   zfs rollback -r rpool/local/root@blank
+  # '';
+
   # Timezone
   time.timeZone = "Europe/Rome";
   time.hardwareClockInLocalTime = false;
