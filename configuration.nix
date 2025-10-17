@@ -13,11 +13,14 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.efiInstallAsRemovable = true;
+  boot.initrd.postDeviceCommands = lib.mkAfter ''
+    zfs rollback -r zpool/root@blank
+  '';
 
-  # boot.initrd.postDeviceCommands = lib.mkAfter ''
-  #   zfs rollback -r rpool/local/root@blank
-  # '';
-
+  fileSystems."/persistence".neededForBoot = true;
+  
+  # Nix Settings
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # Timezone
   time.timeZone = "Europe/Rome";
   time.hardwareClockInLocalTime = false;
@@ -41,11 +44,24 @@
     packages = [];  
   };
 
+
+  # Docker
+  # (see: https://nixos.wiki/wiki/Docker )
+#  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
+##  virtualisation.docker.daemon.settings = {
+#  data-root = "/some-place/to-store-the-docker-data";
+#  };
+
   # Packages
   environment.systemPackages = with pkgs; [
     gh # GitHub CLI tool 
     git # Distributed version control system
     nano # Small, user-friendly console text editor
+    neofetch
   ];
 
   # OpenSSH

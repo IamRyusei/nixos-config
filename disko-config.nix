@@ -41,7 +41,7 @@
       zpool = {
         type = "zpool";
         postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zpool/root@blank$' || zfs snapshot zpool/root@blank";
-        preMountHook = "zfs rollback -r zpool/root@blank";
+        #preMountHook = "zfs rollback -r zpool/root@blank";
         datasets = {
           root = {
             type = "zfs_fs";
@@ -52,6 +52,12 @@
           nix = {
             type = "zfs_fs";
             mountpoint = "/nix";
+            options.mountpoint = "legacy";
+            options."com.sun:auto-snapshot" = "true";
+          };
+          home = {
+            type = "zfs_fs";
+            mountpoint = "/home";
             options.mountpoint = "legacy";
             options."com.sun:auto-snapshot" = "true";
           };

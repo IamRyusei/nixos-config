@@ -58,7 +58,7 @@ Identify the disk where to install the system by using `fdisk -l` and `lsblk`.
 1. Retrieve the disk configuration to a temporary location, calling it "disko-config.nix" (we will use it later):
 
 // TODO SOSTITUIRE CON IL DISKO.NIX DI QUESTO PROGETTO  
-> $ curl https://raw.githubusercontent.com/iamryusei/nixos-config/refs/heads/master/bootstrap/disko-config.nix -o /tmp/disko-config.nix
+> $ curl https://raw.githubusercontent.com/iamryusei/nixos-config/refs/heads/master/disko-config.nix -o /tmp/disko-config.nix
 
 NANO and change /dev/sdx to target disk
 
@@ -81,8 +81,8 @@ Before I even mount it, I create a snapshot while it is totally blank:
 > $ nixos-generate-config --no-filesystems --root /mnt \
 > $ mv /tmp/disko-config.nix /mnt/etc/nixos \
 > $ cd /mnt/etc/nixos \
-> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/bootstrap/flake.nix -o flake.nix \
-> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/bootstrap/configuration.nix -o configuration.nix \
+> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/flake.nix -o flake.nix \
+> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/configuration.nix -o configuration.nix \
 
 set networking.hostId to value of -> head -c 8 /etc/machine-id
 
