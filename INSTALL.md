@@ -8,27 +8,24 @@ In particular, this guide refers to NixOS 24.11 (Vicuna).
 
 1. Download the minimal ISO image of the latest NixOS distro from the [official link](https://nixos.org/download/#download-nixos)
 or an older version from [here](https://releases.nixos.org/?prefix=nixos) 
-https://github.com/nix-community/nixos-images
+https://github.com/nix-community/nixos-images instead.
 
-instead.
-
-2. Create a bootable USB drive that will be used for installation
-Installation with minimal installer.
+2. Create a bootable USB drive that will be used for installation Installation with minimal installer.
 
 3. Boot into the nixos minimal installer.
 
 ## Installation
 
-1. (Optional) Switch keyboard layout to your preferred one (in my case it's Italian)
+### 1. (Optional) Switch keyboard layout to your preferred one (in my case it's Italian)
 
 > $ sudo loadkeys it
 
-2. Open a shell as root and navigate to the `/root` directory
+### 2. Open a shell as root and navigate to the `/root` directory
 
 > $ sudo -s \
 > $ cd /
 
-1. (Optional) WIFI
+### 3. (Optional) WIFI
 > $ ifconfig # to check the NIC \
 > $ wpa_passphrase "\$YOUR_SSID" "\$YOUR_PASSWORD" > /tmp/wpa_supplicant.conf \
 > $ wpa_supplicant -B -i interface_name -c /tmp/wpa_supplicant.conf
@@ -38,7 +35,6 @@ Installation with minimal installer.
 > $ ssh -V \
 > $ nix-env -iA nixpkgs.openssh \
 > $ sudo nano /etc/ssh/sshd_config \
-
 
 PasswordAuthentication yes
 PermitRootLogin yes
@@ -84,9 +80,9 @@ Before I even mount it, I create a snapshot while it is totally blank:
 
 > $ nixos-generate-config --no-filesystems --root /mnt \
 > $ mv /tmp/disko-config.nix /mnt/etc/nixos \
-> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/bootstrap/flake.nix -o /mnt/etc/nixos/flake.nix \
-> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/bootstrap/configuration.nix -o /mnt/etc/nixos/configuration.nix \
-> $ cd /mnt/etc/nixos
+> $ cd /mnt/etc/nixos \
+> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/bootstrap/flake.nix -o flake.nix \
+> $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/bootstrap/configuration.nix -o configuration.nix \
 
 set networking.hostId to value of -> head -c 8 /etc/machine-id
 
@@ -111,3 +107,8 @@ set networking.hostId to value of -> head -c 8 /etc/machine-id
 # NOTE: You will be prompted to set the root password at this point.
 
 > $ shutdown now
+
+remove drive
+
+reboot
+

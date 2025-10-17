@@ -1,10 +1,10 @@
 # https://nixos.wiki/wiki/Impermanence
 { config, pkgs, ... }:
-let
-  impermanence = builtins.fetchTarball "https://github.com/nix-community/impermanence/archive/master.tar.gz";
-in
+#let
+#  impermanence = builtins.fetchTarball "https://github.com/nix-community/impermanence/archive/master.tar.gz";
+#in 
 {
-  imports = [ "${impermanence}/nixos.nix" ];
+  #imports = [ "${impermanence}/nixos.nix" ];
 
   environment.persistence."/persistence" = {
     enable = true;

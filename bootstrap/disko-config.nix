@@ -40,7 +40,7 @@
     zpool = {
       zpool = {
         type = "zpool";
-        postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zpool/root@blank$' || zfs snapshot zpool/root@blank"
+        postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zpool/root@blank$' || zfs snapshot zpool/root@blank";
         preMountHook = "zfs rollback -r zpool/root@blank";
         datasets = {
           root = {
