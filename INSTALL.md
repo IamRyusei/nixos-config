@@ -55,14 +55,15 @@ Identify wether the system is UEFI or BIOS (legacy) by checking if `/sys/firmwar
 
 Identify the disk where to install the system by using `fdisk -l` and `lsblk`.
 
-1. Retrieve the disk configuration to a temporary location, calling it "disko-config.nix" (we will use it later):
+1. Retrieve the disk configuration to a temporary location, calling it "disko.nix" (we will use it later):
 
 // TODO SOSTITUIRE CON IL DISKO.NIX DI QUESTO PROGETTO  
-> $ curl https://raw.githubusercontent.com/iamryusei/nixos-config/refs/heads/master/disko-config.nix -o /tmp/disko-config.nix
+> $ cd /tmp \
+> $ curl https://raw.githubusercontent.com/iamryusei/nixos-config/refs/heads/master/disko.nix
 
 NANO and change /dev/sdx to target disk
 
-> $ nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount /tmp/disko-config.nix
+> $ nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount /tmp/disko.nix
 
 check if everything is ok with `df -h` `zfs list` `zpool list` `zfs list -t snapshot`should see zroot/root mounted on /mnt, and other ...
 
@@ -79,7 +80,7 @@ Before I even mount it, I create a snapshot while it is totally blank:
 > $  zfs snapshot zroot/root@blank
 
 > $ nixos-generate-config --no-filesystems --root /mnt \
-> $ mv /tmp/disko-config.nix /mnt/etc/nixos \
+> $ mv /tmp/disko.nix /mnt/etc/nixos \
 > $ cd /mnt/etc/nixos \
 > $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/flake.nix -o flake.nix \
 > $ curl https://raw.githubusercontent.com/IamRyusei/nixos-config/refs/heads/master/configuration.nix -o configuration.nix \
